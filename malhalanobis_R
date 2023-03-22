@@ -1,0 +1,29 @@
+mahalanobis <- function(X1, X2) {
+  
+  % Malhalanobis distance between two vectors
+  
+  # Calculate sizes of X1 and X2
+  k1 <- ncol(X1)
+  n1 <- nrow(X1)
+  k2 <- ncol(X2)
+  n2 <- nrow(X2)
+  n <- n1 + n2
+  
+  # Calculate xDiff
+  mean_X1 <- colMeans(X1)
+  mean_X2 <- colMeans(X2)
+  xDiff <- mean_X1 - mean_X2
+  
+  # Calculate pooled covariance
+  cent_X1 <- scale(X1, center = TRUE, scale = FALSE)
+  cX1 <- (1/n1) * t(cent_X1) %*% cent_X1
+  cent_X2 <- scale(X2, center = TRUE, scale = FALSE)
+  cX2 <- (1/n2) * t(cent_X2) %*% cent_X2
+  pooledCov <- (n1/n) * cX1 + (n2/n) * cX2
+  
+  # Calculate Mahalanobis distance
+ md <- sqrt(t(xDiff) %*% solve(pooledCov) %*% xDiff)
+  
+  # Return the result
+  return(md)
+}
